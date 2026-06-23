@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cafe Aroma Premium</title>
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+}
+header{
+    background:#4e342e;
+    color:white;
+    text-align:center;
+    padding:50px 20px;
+}
+.menu-container{
+    max-width:1200px;
+    margin:auto;
+    padding:40px 20px;
+}
+.menu-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+.card{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 2px 10px rgba(0,0,0,0.15);
+    transition:.3s;
+}
+.card:hover{
+    transform:translateY(-5px);
+}
+.card img{
+    width:100%;
+    height:200px;
+    object-fit:cover;
+    cursor:pointer;
+}
+.card-content{
+    padding:15px;
+}
+.price{
+    color:#6d4c41;
+    font-weight:bold;
+}
+.modal{
+    display:none;
+    position:fixed;
+    z-index:999;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.85);
+}
+.modal img{
+    display:block;
+    max-width:90%;
+    max-height:80%;
+    margin:5% auto;
+}
+.close{
+    color:white;
+    font-size:40px;
+    position:absolute;
+    top:15px;
+    right:30px;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>☕ Cafe Aroma</h1>
+<p>Menu Favorit Kami</p>
+</header>
+
+<div class="menu-container">
+<div class="menu-grid">
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800" onclick="openModal(this.src)">
+<div class="card-content">
+<h3>Espresso</h3>
+<p>Kopi hitam dengan rasa kuat.</p>
+<p class="price">Rp20.000</p>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800" onclick="openModal(this.src)">
+<div class="card-content">
+<h3>Cappuccino</h3>
+<p>Espresso dengan foam susu.</p>
+<p class="price">Rp28.000</p>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1561047029-3000c68339ca?w=800" onclick="openModal(this.src)">
+<div class="card-content">
+<h3>Latte</h3>
+<p>Kopi susu lembut dan creamy.</p>
+<p class="price">Rp30.000</p>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=800" onclick="openModal(this.src)">
+<div class="card-content">
+<h3>Cheesecake</h3>
+<p>Cheesecake lembut favorit pelanggan.</p>
+<p class="price">Rp35.000</p>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id="modal" class="modal">
+<span class="close" onclick="closeModal()">&times;</span>
+<img id="modalImg">
+</div>
+
+<script>
+function openModal(src){
+    document.getElementById('modal').style.display='block';
+    document.getElementById('modalImg').src=src;
+}
+function closeModal(){
+    document.getElementById('modal').style.display='none';
+}
+</script>
+
+</body>
+</html>
