@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cafe Aroma - Order Form</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#f4f4f4}
+header{background:#4e342e;color:white;text-align:center;padding:25px}
+.container{max-width:1200px;margin:auto;padding:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+.card{background:white;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.card img{width:100%;height:180px;object-fit:cover}
+.content{padding:15px}
+.btn{background:#6d4c41;color:white;border:none;padding:10px 15px;border-radius:5px;cursor:pointer}
+
+#cart{
+position:fixed;
+top:20px;
+right:20px;
+width:340px;
+background:white;
+padding:15px;
+border-radius:10px;
+box-shadow:0 2px 12px rgba(0,0,0,.25);
+max-height:90vh;
+overflow:auto;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-bottom:10px;
+border:1px solid #ccc;
+border-radius:5px;
+box-sizing:border-box;
+}
+
+.item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+border-bottom:1px solid #eee;
+padding-bottom:8px;
+}
+
+.qty button{
+padding:4px 10px;
+margin:0 3px;
+}
+
+.total{
+font-weight:bold;
+margin-top:10px;
+}
+
+.checkout{
+width:100%;
+margin-top:10px;
+padding:12px;
+background:green;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>☕ Cafe Aroma</h1>
+<p>Pemesanan dengan Nama Pelanggan & Nomor Meja</p>
+</header>
+
+<div id="cart">
+<h3>🛒 Keranjang Pesanan</h3>
+
+<input type="text" id="customerName" placeholder="Nama Pelanggan">
+<input type="text" id="tableNumber" placeholder="Nomor Meja">
+
+<div id="cartItems"></div>
+
+<div class="total">
+Total: Rp <span id="total">0</span>
+</div>
+
+<button class="checkout" onclick="checkout()">
+Order via WhatsApp
+</button>
+</div>
+
+<div class="container">
+<div class="grid">
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800">
+<div class="content">
+<h3>Espresso</h3>
+<p>Rp20.000</p>
+<button class="btn" onclick="addItem('Espresso',20000)">Tambah</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800">
+<div class="content">
+<h3>Cappuccino</h3>
+<p>Rp28.000</p>
+<button class="btn" onclick="addItem('Cappuccino',28000)">Tambah</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1561047029-3000c68339ca?w=800">
+<div class="content">
+<h3>Latte</h3>
+<p>Rp30.000</p>
+<button class="btn" onclick="addItem('Latte',30000)">Tambah</button>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=800">
+<div class="content">
+<h3>Cheesecake</h3>
+<p>Rp35.000</p>
+<button class="btn" onclick="addItem('Cheesecake',35000)">Tambah</button>
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+let cart = {};
+
+function addItem(name, price){
+    if(!cart[name]){
+        cart[name] = {price:price, qty:1};
+    } else {
+        cart[name].qty++;
+    }
+    renderCart();
+}
+
+function changeQty(name, delta){
+    cart[name].qty += delta;
+
+    if(cart[name].qty <= 0){
+        delete cart[name];
+    }
+
+    renderCart();
+}
+
+function renderCart(){
+    let html='';
+    let total=0;
+
+    for(let name in cart){
+        let item = cart[name];
+        let subtotal = item.price * item.qty;
+        total += subtotal;
+
+        html += `
+        <div class="item">
+            <div>
+                <b>${name}</b><br>
+                Rp ${subtotal.toLocaleString('id-ID')}
+            </div>
+            <div class="qty">
+                <button onclick="changeQty('${name}',-1)">-</button>
+                ${item.qty}
+                <button onclick="changeQty('${name}',1)">+</button>
+            </div>
+        </div>`;
+    }
+
+    document.getElementById('cartItems').innerHTML = html;
+    document.getElementById('total').innerText = total.toLocaleString('id-ID');
+}
+
+function checkout(){
+
+    const nama = document.getElementById('customerName').value.trim();
+    const meja = document.getElementById('tableNumber').value.trim();
+
+    if(nama === ''){
+        alert('Masukkan nama pelanggan!');
+        return;
+    }
+
+    if(meja === ''){
+        alert('Masukkan nomor meja!');
+        return;
+    }
+
+    if(Object.keys(cart).length === 0){
+        alert('Keranjang masih kosong!');
+        return;
+    }
+
+    let total = 0;
+
+    let pesan =
+    'Halo Cafe Aroma,%0A%0A' +
+    'Nama: ' + nama + '%0A' +
+    'Meja: ' + meja + '%0A%0A' +
+    'Pesanan:%0A';
+
+    for(let name in cart){
+        let item = cart[name];
+        total += item.price * item.qty;
+
+        pesan +=
+        '- ' + name +
+        ' x' + item.qty +
+        '%0A';
+    }
+
+    pesan += '%0ATotal: Rp ' +
+    total.toLocaleString('id-ID');
+
+    window.open(
+    'https://wa.me/6281234567890?text=' + pesan,
+    '_blank'
+    );
+}
+</script>
+
+</body>
+</html>
